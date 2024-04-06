@@ -1,0 +1,16 @@
+
+App ID
+ipee3a0C
+
+Application Name
+fantasyBaseballYoruba
+
+Client ID (Key):
+dj0yJmk9R2VtbXNoaVNhVmFYJmQ9WVdrOWFYQmxaVE5oTUVNbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWVi
+
+Client Secret 
+a3572a3b51372fe04052034779b8063f87b7b692
+
+sharingApprovalCode
+ jyvwze5 
+fwhnetk
