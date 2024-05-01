@@ -1,0 +1,320 @@
+---
+title: "baseballCurrentYear"
+author: "Ajoni Hopkins"
+date: "2024-04-27"
+output: html_document
+---
+
+```{r, echo=FALSE}
+# Loading Libaries ----
+library(tidyverse)
+#library(YFAR)
+library(knitr)
+```
+
+```{r, echo=FALSE}
+# Loading Datasets  ----
+
+teams <- load("Output Data/teams.RDS")
+allWeeks <- load("Output Data/allWeeks.RDS")
+stat_cats <- load("Output Data/stat_cats.RDS")
+```
+
+## Variables for the Report
+```{r, echo = TRUE}
+
+# create an r script that makes my static fifles, that runs weekly monday in the AM.
+# the shiny taps into my local files that get updated!
+
+# will creating these filters, only update ethe visuals that have cats that change? or will it re-run the entire report? we want the former
+# create a select all field for teams to include in the all team analysis.
+# add titles!
+
+
+# Team to analyze 
+teamAnalyze <- "Aj's Awesome Team" # select 1 only
+  
+# week to analyze
+weekAnalyze <- 4 # select one only
+
+# week range for data viz
+# number of completed weeks
+completedWeeks <- allWeeks %>%
+  filter(team_remaining_games == 0) %>% # only getting info for completed weeks
+  select(team_stats_week) %>%
+  distinct(team_stats_week) %>%
+  as_vector()
+
+#weekRangeAnalyze <- c(3,4) # this will be a filter button, select all that apply
+weekRangeAnalyze <- completedWeeks
+
+# selected stats for dataviz
+battingStatSelected <- 'RBI' # statsListHitting
+pitchingStatSelected <- 'K' #statsListPitching
+
+# Visualization Options ----
+statsList <- c('R', 'HR', 'RBI', 'SB', 'OPS',
+               'W', 'K', 'ERA', 'WHIP', 'SVH')
+
+statsListHitting <- c('R', 'HR', 'RBI', 'SB', 'OPS')
+
+statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SVH')
+
+```
+
+```{r, echo = FALSE}
+# Data Manipulation ----
+# getting data for every team, for every completed week
+allWeekStats <- allWeeks %>%
+  filter(team_remaining_games == 0) %>% # only getting info for completed weeks
+  select(team_stats_week, team_key, team_name, team_stats) %>%
+  unnest(team_stats)
+
+allWeekStats2 <- left_join(allWeekStats, stat_cats, by = 'stat_id') %>%
+  filter(display_name != 'H/AB') %>%
+  mutate(value = as.numeric(value)) %>%
+  select(-stat_id)
+
+# ranking results by week and category. creating z scores
+allWeekStats3 <- allWeekStats2 %>%
+  group_by(team_stats_week, display_name) %>%
+  mutate(Rank = rank(-value),
+         zScore = ifelse(display_name %in% c('ERA', 'WHIP'),
+                         -(value - mean(value))/sd(value),
+                         (value - mean(value))/sd(value)))
+
+# creating function for a results table by week for all source stats! ----
+actualValuesWeek <- function(weekNum){
+  actualValues <- allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == weekNum) %>%
+    select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
+    spread(key = display_name, value = value) %>%
+    mutate(Week = paste('Week', weekNum), .before = team_name) %>%
+    relocate(IP,
+             R, HR, RBI, SB, OPS,
+             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+    rename(SVH = `SV+H`)
+  
+  actualValues
+  
+}
+
+# creating function for a results table by week for rankings! ----
+rankingsWeek <- function(weekNum){
+  
+  rankings <- allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == weekNum) %>%
+    select(-c(value, zScore, team_stats_week, team_key, position_type)) %>%
+    spread(key = display_name, value = Rank) %>%
+    mutate(Week = paste('Week', weekNum), .before = team_name) %>%
+    relocate(IP,
+             R, HR, RBI, SB, OPS,
+             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+    rename(SVH = `SV+H`) 
+  
+  rankings
+}
+  
+# creating function for a results table by week for z scores! ----
+zScoreWeek <- function(weekNum){
+
+  zScore <- allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == weekNum) %>%
+    select(-c(Rank, value, team_stats_week, team_key, position_type)) %>%
+    spread(key = display_name, value = zScore) %>%
+    mutate(Week = paste('Week', weekNum), .before = team_name) %>%
+    relocate(IP,
+             R, HR, RBI, SB, OPS,
+             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+    rename(SVH = `SV+H`)
+
+  zScore
+}
+
+# creating function for a results table by week for total z scores by hitting/pitching! ----
+zScoreSumsWeek <- function(weekNum){
+  
+  zScoreSumsCat <- allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == weekNum) %>%
+    mutate(Week = paste('Week', weekNum),
+           weekNumber = weekNum) %>%
+    group_by(Week, weekNumber, team_name, position_type) %>%
+    summarise(zScoreSum = sum(zScore)) %>%
+      spread(key = team_name, value = zScoreSum)
+  
+  
+  zScoreSumsCat2 <- allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == weekNum) %>%
+    mutate(Week = paste('Week', weekNum),
+           weekNumber = weekNum) %>%
+    group_by(Week, weekNumber, team_name) %>%
+    summarise(zScoreSum = sum(zScore)) %>%
+      spread(key = team_name, value = zScoreSum) %>%
+      mutate(position_type = 'Total')
+  
+  zScoreSumsCat3 <- rbind(zScoreSumsCat, zScoreSumsCat2)
+  
+}
+
+
+# creating function for a results table by week for total z scores by hitting/pitching! ----
+zScoreSums <- tibble()
+
+for (c in weekRangeAnalyze ){
+  zScoreSumsadd <- zScoreSumsWeek(c)
+  
+  zScoreSums <- rbind(zScoreSums, zScoreSumsadd)
+}
+
+zScoreSums2 <- zScoreSums %>%
+  gather(key = 'team_name', value = 'zScoreSum', 4:15)
+
+# Creating the tables functions ----
+actualValues <- actualValuesWeek(weekAnalyze)
+rankings <- rankingsWeek(weekAnalyze)
+zScore <- zScoreWeek(weekAnalyze)
+zScoreSums <- zScoreSumsWeek(weekAnalyze)
+```
+
+
+
+## Full League Viz
+
+```{r, include = TRUE}
+
+# 1 Week Data Viz
+kable(actualValues, caption = "Actual Results by Team for Selected Week")
+
+kable(rankings, caption = "Rankings by Team for Selected Week [1 High]")
+
+kable(zScore, caption = "Z-Scores by Team for Selected Week")
+
+kable(zScoreSums, caption = "Sum of Z-Scores by Stat Category and Team for Selected Week Range")
+
+# Total ZScore by Team
+zScoreSums2 %>%
+  filter(position_type == 'Total',
+         weekNumber %in% weekRangeAnalyze) %>%
+  group_by(team_name) %>%
+  summarise(zScoreSum = sum(zScoreSum)) %>%
+  ggplot(aes(x = team_name, y = zScoreSum)) +
+    geom_col(fill = '#eb5534') +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+    labs(title = 'Total Z-Score for Selected Week Range')
+
+# z score for each category!
+zScoreSums2 %>%
+  filter(position_type != 'Total',
+         weekNumber %in% weekRangeAnalyze) %>%
+  group_by(team_name, position_type) %>%
+  summarise(zScoreSum = sum(zScoreSum)) %>%
+  ggplot(aes(x = team_name, y = zScoreSum, fill = position_type)) +
+    geom_col(position = 'dodge') +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+    labs(title = 'Total Z-Score for Selected Week Range by Stat Type')
+
+# Compare All Teams, 1 Stat, Multiple Weeks, Hitting
+allWeekStats3 %>%
+  filter(display_name == battingStatSelected,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name)) +
+    geom_line() +
+    geom_point() +
+    labs(title = paste('Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
+    xlab(label = 'Week Number')
+
+# Compare All Teams, 1 Stat, Zscores Meaned, Hitting
+allWeekStats3 %>%
+  filter(display_name == battingStatSelected,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  group_by(team_name) %>%
+  summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+  ggplot(aes(x = team_name, y = zScore)) +
+    geom_col() +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+    labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
+
+# Compare All Teams, 1 Stat,Multiple Weeks, Pitching
+allWeekStats3 %>%
+  filter(display_name == pitchingStatSelected,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name)) +
+    geom_line() +
+    geom_point() +
+    labs(title = paste('Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' ')) +
+    xlab(label = 'Week Number')
+
+# Compare All Teams, 1 Stat, Zscores Mean, Pitching
+allWeekStats3 %>%
+  filter(display_name == pitchingStatSelected,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  group_by(team_name) %>%
+  summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+  ggplot(aes(x = team_name, y = zScore)) +
+    geom_col() +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+    labs(title = paste('Mean Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' '))
+
+```
+
+## Team Specific Viz
+
+```{r, include = TRUE}
+# Both Hitting and Pitching ----
+# zScore, Compare stats 1 team
+zScoreSums2 %>%
+  filter(team_name == teamAnalyze,
+         weekNumber %in% weekRangeAnalyze) %>%
+  ggplot(aes(x = weekNumber, y = zScoreSum, color = position_type, group = position_type)) +
+    geom_line() +
+    geom_point() +
+    labs(title = paste('Z-Score Sum for Selected Week Range by Stat Category for Selected Team', sep = ' ')) 
+
+```
+
+```{r, include=TRUE}
+# Hitting Categories ----
+# 1 team, all selected weeks
+allWeekStats3 %>%
+  filter(position_type == 'B', team_name == teamAnalyze,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
+  geom_line() +
+  geom_point()
+
+# Mean z-score by category, all selected weeks
+allWeekStats3 %>%
+  filter(position_type == 'B', team_name == teamAnalyze,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  group_by(display_name) %>%
+  summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+  ggplot(aes(x = display_name, y = zScore)) +
+    geom_col()
+```
+
+```{r, include=TRUE}
+# Pitching Categories ----
+# 1 team, all selected weeks
+allWeekStats3 %>%
+  filter(position_type == 'P', team_name == teamAnalyze,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
+  geom_line() +
+  geom_point()
+
+# Mean z-score by category, all selected weeks
+allWeekStats3 %>%
+  filter(position_type == 'P', team_name == teamAnalyze,
+         team_stats_week %in% weekRangeAnalyze) %>%
+  group_by(display_name) %>%
+  summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+  ggplot(aes(x = display_name, y = zScore)) +
+    geom_col()
+
+```
+
