@@ -20,6 +20,7 @@ library(tidyverse)
 library(knitr)
 library(tinytex)
 library(kableExtra)
+library(RColorBrewer)
 ```
 
 ```{r loading-datasets, echo=FALSE}
@@ -43,8 +44,11 @@ In the section below, you will see the variables selected for this report.
 
 # will creating these filters, only update ethe visuals that have cats that change? or will it re-run the entire report? we want the former
 # create a select all field for teams to include in the all team analysis.
-# add titles!
-# be able to sort!
+
+
+
+
+# map linetypes to specific values
 ```
 
 ```{r variables-for-report, echo = TRUE}
@@ -81,10 +85,30 @@ statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SVH')
 
 ```{r data-manipulation, echo = FALSE, message=FALSE}
 # Data Manipulation ----
+
+
+# creating line type and colors for the data viz
+myColors <- brewer.pal(12, "Set3")
+names(myColors) <- levels(allWeeks$team_name)
+colScale <- scale_colour_manual(name = 'team_name', values = myColors)
+
+
 # getting data for every team, for every completed week
 allWeekStats <- allWeeks %>%
+  mutate(lineColor = case_when(team_id == 1 ~ '#fbb4ae',
+                               team_id == 2 ~ '#b3cde3',
+                               team_id == 3 ~ '#b2df8a',
+                               team_id == 4 ~ '#beaed4',
+                               team_id == 5 ~ '#fdc086',
+                               team_id == 6 ~ '#ffff99',
+                               team_id == 7 ~ '#e41a1c',
+                               team_id == 8 ~ '#377eb8',
+                               team_id == 9 ~ '#4daf4a',
+                               team_id == 10 ~ '#984ea3',
+                               team_id == 11 ~ '#ff7f00',
+                               team_id == 12 ~ '#ffff33')) %>%
   filter(team_remaining_games == 0) %>% # only getting info for completed weeks
-  select(team_stats_week, team_key, team_name, team_stats) %>%
+  select(team_stats_week, team_key, team_id, team_name, team_stats, lineColor) %>%
   unnest(team_stats)
 
 allWeekStats2 <- left_join(allWeekStats, stat_cats, by = 'stat_id') %>%
@@ -115,7 +139,7 @@ zScoreRange <- allWeekStats3 %>%
 #     ungroup() %>%
 #     filter(team_stats_week == 6) %>%
 #     select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
-#     spread(key = display_name, value = value) %>%
+#     pivot_wider(names_from = display_name, values_from = value) %>%
 #     mutate(Week = paste('Week', 7), .before = team_name) %>%
 #     relocate(IP,
 #              R, HR, RBI, SB, OPS,
@@ -131,7 +155,7 @@ actualValuesWeek <- function(weekNum){
     ungroup() %>%
     filter(team_stats_week == weekNum) %>%
     select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
-    spread(key = display_name, value = value) %>%
+    pivot_wider(names_from = display_name, values_from = value) %>%
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
     relocate(IP,
              R, HR, RBI, SB, OPS,
@@ -258,6 +282,7 @@ zScoreSums2 %>%
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = 'Total Z-Score for Selected Week Range') +
     geom_hline(yintercept = 0, color = 'dark gray')
+    
 ```
 
 ```{r full-league-viz-2, include = TRUE, echo=FALSE, message=FALSE, out.extra='style="max-width:none; width:90vw; margin-left:calc(50% - 40vw);"', fig.height = 2.7}
@@ -293,7 +318,8 @@ allWeekStats3 %>%
     labs(title = paste('Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
     xlab(label = 'Week Number') +
     ylim(-zScoreRange, zScoreRange) +
-    geom_hline(yintercept = 0, color = 'dark gray')
+    geom_hline(yintercept = 0, color = 'dark gray') +
+    colScale
 
 # Compare All Teams, 1 Stat, Zscores Meaned, Hitting
 allWeekStats3 %>%
