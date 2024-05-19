@@ -1,7 +1,7 @@
 
-
 # Loading Libaries ----
 library(tidyverse)
+#devtools::install_github("https://github.com/macraesdirtysocks/YFAR")
 library(YFAR)
 
 # Creating Connection to Yahoo ----

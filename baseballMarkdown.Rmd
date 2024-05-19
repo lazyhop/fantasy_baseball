@@ -2,40 +2,54 @@
 title: "baseballCurrentYear"
 author: "Ajoni Hopkins"
 date: "2024-04-27"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
 ---
 
-```{r, echo=FALSE}
-# Loading Libaries ----
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(dev = 'pdf')
+```
+
+```{r, echo=FALSE, message=FALSE}
+# Loading Libraries ----
 library(tidyverse)
 #library(YFAR)
 library(knitr)
+library(tinytex)
+library(kableExtra)
 ```
 
-```{r, echo=FALSE}
+```{r loading-datasets, echo=FALSE}
 # Loading Datasets  ----
 
-teams <- load("Output Data/teams.RDS")
-allWeeks <- load("Output Data/allWeeks.RDS")
-stat_cats <- load("Output Data/stat_cats.RDS")
+load("Output Data/teams.RDS")
+load("Output Data/allWeeks.RDS")
+load("Output Data/stat_cats.RDS")
+
 ```
 
-## Variables for the Report
-```{r, echo = TRUE}
+This report will export visuals about our Fantasy Baseball League. It will first export tables/visuals about the entire league, and afterwards, visuals about a particular team. Most of the visuals will filtered to show data from a specific week, team, and sometimes a particular statistical category.
 
+In the section below, you will see the variables selected for this report.
+
+## Variables for the Report
+```{r notes, echo = FALSE}
+# Notes for future dev
 # create an r script that makes my static fifles, that runs weekly monday in the AM.
 # the shiny taps into my local files that get updated!
 
 # will creating these filters, only update ethe visuals that have cats that change? or will it re-run the entire report? we want the former
 # create a select all field for teams to include in the all team analysis.
 # add titles!
+# be able to sort!
+```
 
-
+```{r variables-for-report, echo = TRUE}
 # Team to analyze 
 teamAnalyze <- "Aj's Awesome Team" # select 1 only
-  
-# week to analyze
-weekAnalyze <- 4 # select one only
 
 # week range for data viz
 # number of completed weeks
@@ -44,6 +58,9 @@ completedWeeks <- allWeeks %>%
   select(team_stats_week) %>%
   distinct(team_stats_week) %>%
   as_vector()
+  
+# week to analyze
+weekAnalyze <- 6 # select one only
 
 #weekRangeAnalyze <- c(3,4) # this will be a filter button, select all that apply
 weekRangeAnalyze <- completedWeeks
@@ -62,7 +79,7 @@ statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SVH')
 
 ```
 
-```{r, echo = FALSE}
+```{r data-manipulation, echo = FALSE, message=FALSE}
 # Data Manipulation ----
 # getting data for every team, for every completed week
 allWeekStats <- allWeeks %>%
@@ -82,6 +99,21 @@ allWeekStats3 <- allWeekStats2 %>%
          zScore = ifelse(display_name %in% c('ERA', 'WHIP'),
                          -(value - mean(value))/sd(value),
                          (value - mean(value))/sd(value)))
+
+# Testing Function -----------------------------------------------------
+allWeekStats3 %>%
+    ungroup() %>%
+    filter(team_stats_week == 6) %>%
+    select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
+    spread(key = display_name, value = value) %>%
+    mutate(Week = paste('Week', 7), .before = team_name) %>%
+    relocate(IP,
+             R, HR, RBI, SB, OPS,
+             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+    rename(SVH = `SV+H`)
+
+# Testing Function End -------------------------------------------------
+
 
 # creating function for a results table by week for all source stats! ----
 actualValuesWeek <- function(weekNum){
@@ -180,21 +212,30 @@ rankings <- rankingsWeek(weekAnalyze)
 zScore <- zScoreWeek(weekAnalyze)
 zScoreSums <- zScoreSumsWeek(weekAnalyze)
 ```
-
-
-
+  
+  
+  
 ## Full League Viz
 
-```{r, include = TRUE}
+```{r full-league-tables, include = TRUE, echo=FALSE, fig.align = 'center'}
 
 # 1 Week Data Viz
 kable(actualValues, caption = "Actual Results by Team for Selected Week")
 
 kable(rankings, caption = "Rankings by Team for Selected Week [1 High]")
 
-kable(zScore, caption = "Z-Scores by Team for Selected Week")
+kable(zScore, digits = 4, caption = "Z-Scores by Team for Selected Week")
 
-kable(zScoreSums, caption = "Sum of Z-Scores by Stat Category and Team for Selected Week Range")
+kable(zScoreSums, digits = 4, caption = "Sum of Z-Scores by Stat Category and Team for Selected Week Range") %>%
+  kable_styling(bootstrap_options = c('striped', 'condensed', 'responsive'),
+                full_width = F,
+                position = 'center') %>%
+  row_spec(0, font_size=9)
+
+```
+
+
+```{r, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
 
 # Total ZScore by Team
 zScoreSums2 %>%
@@ -206,6 +247,9 @@ zScoreSums2 %>%
     geom_col(fill = '#eb5534') +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = 'Total Z-Score for Selected Week Range')
+```
+
+```{r, include = TRUE, echo=FALSE, message=FALSE, out.extra='style="max-width:none; width:90vw; margin-left:calc(50% - 40vw);"', fig.height = 2.7}
 
 # z score for each category!
 zScoreSums2 %>%
@@ -216,8 +260,17 @@ zScoreSums2 %>%
   ggplot(aes(x = team_name, y = zScoreSum, fill = position_type)) +
     geom_col(position = 'dodge') +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-    labs(title = 'Total Z-Score for Selected Week Range by Stat Type')
+    labs(title = 'Total Z-Score for Selected Week Range by Stat Type') +
+    theme(text=element_text(size=6),
+          legend.key.size = unit(.5, 'cm'))
 
+#axis.text=element_text(size=16),
+#          legend.text=element_text(size=16),
+#          axis.title = element_text(size=16)
+
+```
+
+```{r, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
 # Compare All Teams, 1 Stat, Multiple Weeks, Hitting
 allWeekStats3 %>%
   filter(display_name == battingStatSelected,
@@ -237,7 +290,7 @@ allWeekStats3 %>%
   ggplot(aes(x = team_name, y = zScore)) +
     geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-    labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
+    labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' '))
 
 # Compare All Teams, 1 Stat,Multiple Weeks, Pitching
 allWeekStats3 %>%
@@ -318,3 +371,10 @@ allWeekStats3 %>%
 
 ```
 
+
+Ideas
+- change range on visuals for z-score to min/max for total group
+- widen visuals, so things arent so squat.
+- Center data viz
+- find a way to differentiate between the 12 teams. Both textures and colors?
+- create a zero line for the z-score graphs!
