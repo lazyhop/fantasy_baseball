@@ -100,17 +100,27 @@ allWeekStats3 <- allWeekStats2 %>%
                          -(value - mean(value))/sd(value),
                          (value - mean(value))/sd(value)))
 
+# getting max range of zScore for data viz
+zScoreRange <- allWeekStats3 %>%
+  ungroup() %>%
+  select(zScore) %>%
+  mutate(zScore = round(abs(zScore), 0)) %>%
+  filter(zScore == max(zScore)) %>%
+  arrange(desc(zScore)) %>%
+  distinct(zScore) %>%
+  as.numeric()
+
 # Testing Function -----------------------------------------------------
-allWeekStats3 %>%
-    ungroup() %>%
-    filter(team_stats_week == 6) %>%
-    select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
-    spread(key = display_name, value = value) %>%
-    mutate(Week = paste('Week', 7), .before = team_name) %>%
-    relocate(IP,
-             R, HR, RBI, SB, OPS,
-             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
-    rename(SVH = `SV+H`)
+# allWeekStats3 %>%
+#     ungroup() %>%
+#     filter(team_stats_week == 6) %>%
+#     select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
+#     spread(key = display_name, value = value) %>%
+#     mutate(Week = paste('Week', 7), .before = team_name) %>%
+#     relocate(IP,
+#              R, HR, RBI, SB, OPS,
+#              W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+#     rename(SVH = `SV+H`)
 
 # Testing Function End -------------------------------------------------
 
@@ -235,7 +245,7 @@ kable(zScoreSums, digits = 4, caption = "Sum of Z-Scores by Stat Category and Te
 ```
 
 
-```{r, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
+```{r full-league-viz-1, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
 
 # Total ZScore by Team
 zScoreSums2 %>%
@@ -246,10 +256,11 @@ zScoreSums2 %>%
   ggplot(aes(x = team_name, y = zScoreSum)) +
     geom_col(fill = '#eb5534') +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-    labs(title = 'Total Z-Score for Selected Week Range')
+    labs(title = 'Total Z-Score for Selected Week Range') +
+    geom_hline(yintercept = 0, color = 'dark gray')
 ```
 
-```{r, include = TRUE, echo=FALSE, message=FALSE, out.extra='style="max-width:none; width:90vw; margin-left:calc(50% - 40vw);"', fig.height = 2.7}
+```{r full-league-viz-2, include = TRUE, echo=FALSE, message=FALSE, out.extra='style="max-width:none; width:90vw; margin-left:calc(50% - 40vw);"', fig.height = 2.7}
 
 # z score for each category!
 zScoreSums2 %>%
@@ -262,7 +273,8 @@ zScoreSums2 %>%
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = 'Total Z-Score for Selected Week Range by Stat Type') +
     theme(text=element_text(size=6),
-          legend.key.size = unit(.5, 'cm'))
+          legend.key.size = unit(.5, 'cm')) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 #axis.text=element_text(size=16),
 #          legend.text=element_text(size=16),
@@ -270,7 +282,7 @@ zScoreSums2 %>%
 
 ```
 
-```{r, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
+```{r full-league-viz-3, include = TRUE, echo=FALSE, message=FALSE, fig.width = 10, fig.align = 'center'}
 # Compare All Teams, 1 Stat, Multiple Weeks, Hitting
 allWeekStats3 %>%
   filter(display_name == battingStatSelected,
@@ -279,7 +291,9 @@ allWeekStats3 %>%
     geom_line() +
     geom_point() +
     labs(title = paste('Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
-    xlab(label = 'Week Number')
+    xlab(label = 'Week Number') +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 # Compare All Teams, 1 Stat, Zscores Meaned, Hitting
 allWeekStats3 %>%
@@ -290,7 +304,9 @@ allWeekStats3 %>%
   ggplot(aes(x = team_name, y = zScore)) +
     geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-    labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' '))
+    labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 # Compare All Teams, 1 Stat,Multiple Weeks, Pitching
 allWeekStats3 %>%
@@ -300,7 +316,9 @@ allWeekStats3 %>%
     geom_line() +
     geom_point() +
     labs(title = paste('Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' ')) +
-    xlab(label = 'Week Number')
+    xlab(label = 'Week Number') +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 # Compare All Teams, 1 Stat, Zscores Mean, Pitching
 allWeekStats3 %>%
@@ -311,13 +329,15 @@ allWeekStats3 %>%
   ggplot(aes(x = team_name, y = zScore)) +
     geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-    labs(title = paste('Mean Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' '))
+    labs(title = paste('Mean Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' ')) +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 ```
 
 ## Team Specific Viz
 
-```{r, include = TRUE}
+```{r team-specific-viz-HP, echo = FALSE}
 # Both Hitting and Pitching ----
 # zScore, Compare stats 1 team
 zScoreSums2 %>%
@@ -326,19 +346,25 @@ zScoreSums2 %>%
   ggplot(aes(x = weekNumber, y = zScoreSum, color = position_type, group = position_type)) +
     geom_line() +
     geom_point() +
-    labs(title = paste('Z-Score Sum for Selected Week Range by Stat Category for Selected Team', sep = ' ')) 
+    labs(title = paste('Z-Score Sum for Selected Week Range by Stat Category for', teamAnalyze, sep = ' ')) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 ```
 
-```{r, include=TRUE}
+```{r team-specific-viz-hitting, echo=FALSE}
 # Hitting Categories ----
 # 1 team, all selected weeks
 allWeekStats3 %>%
   filter(position_type == 'B', team_name == teamAnalyze,
          team_stats_week %in% weekRangeAnalyze) %>%
   ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
-  geom_line() +
-  geom_point()
+    geom_line() +
+    geom_point() +
+    labs(title = paste('Z-Score by Week and Hitting Category for', teamAnalyze, sep = ' ')) +
+    xlab(label = 'Week Number') +
+    scale_color_discrete(name = "Category") +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 # Mean z-score by category, all selected weeks
 allWeekStats3 %>%
@@ -347,18 +373,27 @@ allWeekStats3 %>%
   group_by(display_name) %>%
   summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
   ggplot(aes(x = display_name, y = zScore)) +
-    geom_col()
+    geom_col() +
+    labs(title = paste('Mean Z-Score for Selected Week Range by Hitting Category for', teamAnalyze, sep = ' ')) +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
+
 ```
 
-```{r, include=TRUE}
+```{r team-specific-viz-pitching, echo=FALSE}
 # Pitching Categories ----
 # 1 team, all selected weeks
 allWeekStats3 %>%
   filter(position_type == 'P', team_name == teamAnalyze,
          team_stats_week %in% weekRangeAnalyze) %>%
   ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
-  geom_line() +
-  geom_point()
+    geom_line() +
+    geom_point() +
+    labs(title = paste('Z-Score by Week and Pitching Category for', teamAnalyze, sep = ' ')) +
+    xlab(label = 'Week Number') +
+    scale_color_discrete(name = "Category") +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 # Mean z-score by category, all selected weeks
 allWeekStats3 %>%
@@ -367,14 +402,15 @@ allWeekStats3 %>%
   group_by(display_name) %>%
   summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
   ggplot(aes(x = display_name, y = zScore)) +
-    geom_col()
+    geom_col() +
+  labs(title = paste('Z-Score for Selected Week Range by Stat Category for', teamAnalyze, sep = ' ')) +
+    xlab(label = 'Week Number') +
+  scale_color_discrete(name = "Category") +
+    ylim(-zScoreRange, zScoreRange) +
+    geom_hline(yintercept = 0, color = 'dark gray')
 
 ```
 
 
 Ideas
-- change range on visuals for z-score to min/max for total group
-- widen visuals, so things arent so squat.
-- Center data viz
 - find a way to differentiate between the 12 teams. Both textures and colors?
-- create a zero line for the z-score graphs!
