@@ -18,7 +18,7 @@ editor_options:
 library(tidyverse)
 #library(YFAR)
 library(knitr)
-library(tinytex)
+#library(tinytex)
 library(kableExtra)
 library(RColorBrewer)
 ```
@@ -87,28 +87,22 @@ statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SVH')
 # Data Manipulation ----
 
 
-# creating line type and colors for the data viz
-myColors <- brewer.pal(12, "Set3")
+# creating colors for the data viz
+myColors <- brewer.pal(12, "Paired")
 names(myColors) <- levels(allWeeks$team_name)
 colScale <- scale_colour_manual(name = 'team_name', values = myColors)
+colScaleFill <- scale_fill_manual(name = 'team_name', values = myColors)
 
+# creating line type for the data viz
+myLines <- c('solid', 'twodash','solid', 'twodash','solid', 'twodash',
+             'solid', 'twodash','solid', 'twodash','solid', 'twodash')
+names(myLines) <- levels(allWeeks$team_name)
+lineType <- scale_linetype_manual(name = 'team_name', values = myLines)
 
 # getting data for every team, for every completed week
 allWeekStats <- allWeeks %>%
-  mutate(lineColor = case_when(team_id == 1 ~ '#fbb4ae',
-                               team_id == 2 ~ '#b3cde3',
-                               team_id == 3 ~ '#b2df8a',
-                               team_id == 4 ~ '#beaed4',
-                               team_id == 5 ~ '#fdc086',
-                               team_id == 6 ~ '#ffff99',
-                               team_id == 7 ~ '#e41a1c',
-                               team_id == 8 ~ '#377eb8',
-                               team_id == 9 ~ '#4daf4a',
-                               team_id == 10 ~ '#984ea3',
-                               team_id == 11 ~ '#ff7f00',
-                               team_id == 12 ~ '#ffff33')) %>%
   filter(team_remaining_games == 0) %>% # only getting info for completed weeks
-  select(team_stats_week, team_key, team_id, team_name, team_stats, lineColor) %>%
+  select(team_stats_week, team_key, team_id, team_name, team_stats) %>%
   unnest(team_stats)
 
 allWeekStats2 <- left_join(allWeekStats, stat_cats, by = 'stat_id') %>%
@@ -277,11 +271,12 @@ zScoreSums2 %>%
          weekNumber %in% weekRangeAnalyze) %>%
   group_by(team_name) %>%
   summarise(zScoreSum = sum(zScoreSum)) %>%
-  ggplot(aes(x = team_name, y = zScoreSum)) +
-    geom_col(fill = '#eb5534') +
+  ggplot(aes(x = team_name, y = zScoreSum, fill = team_name)) +
+    geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = 'Total Z-Score for Selected Week Range') +
-    geom_hline(yintercept = 0, color = 'dark gray')
+    geom_hline(yintercept = 0, color = 'dark gray') +
+    colScaleFill
     
 ```
 
@@ -312,14 +307,15 @@ zScoreSums2 %>%
 allWeekStats3 %>%
   filter(display_name == battingStatSelected,
          team_stats_week %in% weekRangeAnalyze) %>%
-  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name)) +
-    geom_line() +
+  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name, linetype = team_name)) +
+    geom_line(linewidth = 1) +
     geom_point() +
     labs(title = paste('Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
     xlab(label = 'Week Number') +
     ylim(-zScoreRange, zScoreRange) +
     geom_hline(yintercept = 0, color = 'dark gray') +
-    colScale
+    colScale +
+    lineType
 
 # Compare All Teams, 1 Stat, Zscores Meaned, Hitting
 allWeekStats3 %>%
@@ -327,24 +323,27 @@ allWeekStats3 %>%
          team_stats_week %in% weekRangeAnalyze) %>%
   group_by(team_name) %>%
   summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
-  ggplot(aes(x = team_name, y = zScore)) +
+  ggplot(aes(x = team_name, y = zScore, fill = team_name)) +
     geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = paste('Mean Z-Score for Selected Week Range for', battingStatSelected, sep = ' ')) +
     ylim(-zScoreRange, zScoreRange) +
-    geom_hline(yintercept = 0, color = 'dark gray')
+    geom_hline(yintercept = 0, color = 'dark gray') +
+    colScaleFill
 
 # Compare All Teams, 1 Stat,Multiple Weeks, Pitching
 allWeekStats3 %>%
   filter(display_name == pitchingStatSelected,
          team_stats_week %in% weekRangeAnalyze) %>%
-  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name)) +
-    geom_line() +
+  ggplot(aes(x = team_stats_week, y = zScore, color = team_name, group = team_name, linetype = team_name)) +
+    geom_line(linewidth = 1) +
     geom_point() +
     labs(title = paste('Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' ')) +
     xlab(label = 'Week Number') +
     ylim(-zScoreRange, zScoreRange) +
-    geom_hline(yintercept = 0, color = 'dark gray')
+    geom_hline(yintercept = 0, color = 'dark gray') +
+    colScale +
+    lineType
 
 # Compare All Teams, 1 Stat, Zscores Mean, Pitching
 allWeekStats3 %>%
@@ -352,12 +351,13 @@ allWeekStats3 %>%
          team_stats_week %in% weekRangeAnalyze) %>%
   group_by(team_name) %>%
   summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
-  ggplot(aes(x = team_name, y = zScore)) +
+  ggplot(aes(x = team_name, y = zScore, fill = team_name)) +
     geom_col() +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
     labs(title = paste('Mean Z-Score for Selected Week Range for', pitchingStatSelected, sep = ' ')) +
     ylim(-zScoreRange, zScoreRange) +
-    geom_hline(yintercept = 0, color = 'dark gray')
+    geom_hline(yintercept = 0, color = 'dark gray') +
+    colScaleFill
 
 ```
 
@@ -437,6 +437,3 @@ allWeekStats3 %>%
 
 ```
 
-
-Ideas
-- find a way to differentiate between the 12 teams. Both textures and colors?
