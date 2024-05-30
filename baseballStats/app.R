@@ -7,6 +7,7 @@ library(RColorBrewer)
 
 library(shiny)
 library(reactable)
+library(DT)
 
 # Loading Datasets  ----
 load("Output Data/teams.RDS")
@@ -154,28 +155,92 @@ completedWeeks <- allWeeks %>%
   filter(team_remaining_games == 0) %>% # only getting info for completed weeks
   select(team_stats_week) %>%
   distinct(team_stats_week) %>%
-  as.vector() 
+  unlist()
 
 
+# #Defining UI
+# ui <- fluidPage(
+# 
+#     # Application title
+#     titlePanel("Fantasy Baseball Analyzer"),
+# 
+#   
+#     selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
+#     reactable::reactableOutput("actualValuesTable")
+# )
+# 
+# #Defining server logic
+# server <- function(input, output) {
+# 
+#     output$actualValuesTable <- renderReactable(
+#       reactable(data = actualValuesWeek(input$weeksToAnalyze),
+#                 pagination = FALSE,
+#                 fullWidth = FALSE,
+#                 defaultColDef = colDef(maxWidth = 150))
+#       )
+# 
+# }
 
-# Defining UI
+
+# new ui and server using DT package ----
+
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Fantasy Baseball Analyzer"),
-
-    selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
-    
-    reactable::reactableOutput("actualValuesTable")
+  
+  # Application title
+  titlePanel("Fantasy Baseball Analyzer"),
+  
+  
+  selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
+  DTOutput("actualValuesTable")
 )
 
-# Defining server logic 
-server <- function(input, output) {
 
-    output$actualValuesTable <- renderReactable(
-      reactable(actualValuesWeek(input$weeksToAnalyze)))
-    
+server <- function(input, output) {
+  
+  output$actualValuesTable <- renderDT(
+    datatable(
+      actualValuesWeek(input$weeksToAnalyze),
+      options = list(
+        paging = FALSE,
+        dom = 't') #only including the table, not the info summary, or the pagination control!
+      )
+  )
+  
 }
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
+
+# ui <- fluidPage(
+#   
+#   # Application title
+#   titlePanel("Fantasy Baseball Analyzer"),
+#   
+#   fluidRow(
+#     column(4,
+#            selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks))
+#     )
+#   ),
+#   
+#   fluidRow(
+#     column(8,
+#            htmlOutput("actualValuesTable", width = '100%')
+#     )
+#   )
+# )
+# 
+# server <- function(input, output) {
+#   
+#   output$actualValuesTable <- renderText(
+#     reactive({
+#       kable(actualValuesWeek(input$weeksToAnalyze), caption = "Actual Results by Team for Selected Week")
+#     })
+#   )
+#   
+# }
+
+
+
