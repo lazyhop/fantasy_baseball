@@ -2,11 +2,11 @@
 # Loading Libraries ----
 library(tidyverse)
 library(knitr)
-library(kableExtra)
+#library(kableExtra)
 library(RColorBrewer)
 
 library(shiny)
-library(reactable)
+#library(reactable)
 library(DT)
 
 # Loading Datasets  ----
@@ -191,18 +191,27 @@ ui <- fluidPage(
   
   
   selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
+  
+ 
+  textOutput('table1title'),
   DTOutput("actualValuesTable")
 )
 
 
 server <- function(input, output) {
   
+  output$table1title <- renderText(reactive(
+    'Actual Results by Team for Week ', input$weeksToAnalyze)
+  )
+  
+  
   output$actualValuesTable <- renderDT(
     datatable(
       actualValuesWeek(input$weeksToAnalyze),
       options = list(
         paging = FALSE,
-        dom = 't') #only including the table, not the info summary, or the pagination control!
+        dom = 't',
+        ) #only including the table, not the info summary, or the pagination control!
       )
   )
   
