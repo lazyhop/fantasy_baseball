@@ -184,7 +184,7 @@ zScoreWeek <- function(weekNum){
     ungroup() %>%
     filter(team_stats_week == weekNum) %>%
     select(-c(Rank, value, team_stats_week, team_key, position_type)) %>%
-    spread(key = display_name, value = zScore) %>%
+    spread(key = display_name, value = round(zScore, digits=3 )) %>%
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
     relocate(IP,
              R, HR, RBI, SB, OPS,
@@ -268,7 +268,8 @@ kable(zScoreSums, digits = 4, caption = "Sum of Z-Scores by Stat Category and Te
 # Total ZScore by Team
 zScoreSums2 %>%
   filter(position_type == 'Total',
-         weekNumber %in% weekRangeAnalyze) %>%
+         #weekNumber %in% weekRangeAnalyze) %>%
+         weekNumber %in% c(6:8)) %>%
   group_by(team_name) %>%
   summarise(zScoreSum = sum(zScoreSum)) %>%
   ggplot(aes(x = team_name, y = zScoreSum, fill = team_name)) +
