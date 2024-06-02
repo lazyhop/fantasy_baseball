@@ -52,8 +52,8 @@ actualValuesWeek <- function(weekNum){
     select(-c(Rank, zScore, team_stats_week, team_key, position_type)) %>%
     pivot_wider(names_from = display_name, values_from = value) %>%
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
-    relocate(IP,
-             R, HR, RBI, SB, OPS,
+    relocate(R, HR, RBI, SB, OPS,
+             IP,
              W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
     rename(SVH = `SV+H`)
   
@@ -70,8 +70,8 @@ rankingsWeek <- function(weekNum){
     select(-c(value, zScore, team_stats_week, team_key, position_type)) %>%
     spread(key = display_name, value = Rank) %>%
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
-    relocate(IP,
-             R, HR, RBI, SB, OPS,
+    relocate(R, HR, RBI, SB, OPS,
+             IP,
              W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
     rename(SVH = `SV+H`) 
   
@@ -87,9 +87,9 @@ zScoreWeek <- function(weekNum){
     select(-c(Rank, value, team_stats_week, team_key, position_type)) %>%
     spread(key = display_name, value = zScore) %>%
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
-    relocate(IP,
-             R, HR, RBI, SB, OPS,
-             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
+    relocate(R, HR, RBI, SB, OPS,
+             IP,
+             W, K, ERA, WHIP, `SV+H`,, .after= team_name) %>%
     rename(SVH = `SV+H`)
   
   zScore
@@ -158,29 +158,10 @@ completedWeeks <- allWeeks %>%
   unlist()
 
 
-# #Defining UI
-# ui <- fluidPage(
-# 
-#     # Application title
-#     titlePanel("Fantasy Baseball Analyzer"),
-# 
-#   
-#     selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
-#     reactable::reactableOutput("actualValuesTable")
-# )
-# 
-# #Defining server logic
-# server <- function(input, output) {
-# 
-#     output$actualValuesTable <- renderReactable(
-#       reactable(data = actualValuesWeek(input$weeksToAnalyze),
-#                 pagination = FALSE,
-#                 fullWidth = FALSE,
-#                 defaultColDef = colDef(maxWidth = 150))
-#       )
-# 
-# }
 
+actualValuesWeek(2)
+
+# adding functions for server!
 
 # new ui and server using DT package ----
 
@@ -190,36 +171,85 @@ ui <- fluidPage(
   titlePanel("Fantasy Baseball Analyzer"),
   
   
-  selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks)),
+  selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks),
+              selected = 8),
   
- 
   textOutput('table1title'),
-  DTOutput("actualValuesTable")
+  DTOutput("actualValuesTable"),
+  
+  textOutput('table2title'),
+  DTOutput("rankingsTable")
+  
 )
 
 
 server <- function(input, output) {
+ 
+  rValues <- reactiveValues()
   
-  output$table1title <- renderText(reactive(
-    'Actual Results by Team for Week ', input$weeksToAnalyze)
+  observe(
+    rValues$week <-  paste('Actual Results for Week', input$weeksToAnalyze)
   )
   
   
+  output$table1title <- renderText({
+    rValues$week
+  }
+  )
+  
+  
+  title2Paste <- reactive({
+    paste('Rankings for Week', input$weeksToAnalyze, '[1 High]')
+  })
+  
+  
+  output$table2title <- renderText({
+    title2Paste()
+  }
+  )
+   
   output$actualValuesTable <- renderDT(
     datatable(
       actualValuesWeek(input$weeksToAnalyze),
       options = list(
         paging = FALSE,
-        dom = 't',
-        ) #only including the table, not the info summary, or the pagination control!
+        dom = 't'
+        ),
+      rownames = FALSE #only including the table, not the info summary, or the pagination control!
       )
+    )
+  
+  output$rankingsTable <- renderDT(
+    datatable(
+      rankingsWeek(input$weeksToAnalyze),
+      options = list(
+        paging = FALSE,
+        dom = 't'
+      ),
+      rownames = FALSE #only including the table, not the info summary, or the pagination control!
+    )
   )
+  
+  
   
 }
 
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
+
+title1Paste <- reactive({
+  paste('Actual Results for Week', input$weeksToAnalyze)
+})
+
+
+output$table1title <- renderText({
+  title1Paste()
+}
+
+
 
 
 
