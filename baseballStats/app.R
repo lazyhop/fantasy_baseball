@@ -10,9 +10,12 @@ library(shiny)
 library(DT)
 
 # Loading Datasets  ----
-load("Output Data/teams.RDS")
-load("Output Data/allWeeks.RDS")
-load("Output Data/stat_cats.RDS")
+# load("Output Data/teams.RDS")
+# load("Output Data/allWeeks.RDS")
+# load("Output Data/stat_cats.RDS")
+load("baseballStats/teams.RDS")
+load("baseballStats/allWeeks.RDS")
+load("baseballStats/stat_cats.RDS")
 
 # Data Manipulation ----
 # getting data for every team, for every completed week
@@ -122,13 +125,19 @@ zScoreSumsWeek <- function(weekNum){
   
 }
 
+# Creating Ranges for the page
+completedWeeks <- allWeeks %>%
+  filter(team_remaining_games == 0) %>% # only getting info for completed weeks
+  select(team_stats_week) %>%
+  distinct(team_stats_week) %>%
+  unlist()
 
 # creating function for a results table by week for total z scores by hitting/pitching! ----
 zScoreSums <- tibble()
 
 for (c in completedWeeks ){
   zScoreSumsadd <- zScoreSumsWeek(c)
-
+  
   zScoreSums <- rbind(zScoreSums, zScoreSumsadd)
 }
 
@@ -150,12 +159,6 @@ myLines <- c('solid', 'twodash','solid', 'twodash','solid', 'twodash',
 names(myLines) <- levels(allWeeks$team_name)
 lineType <- scale_linetype_manual(name = 'team_name', values = myLines)
 
-# Creating Ranges for the page
-completedWeeks <- allWeeks %>%
-  filter(team_remaining_games == 0) %>% # only getting info for completed weeks
-  select(team_stats_week) %>%
-  distinct(team_stats_week) %>%
-  unlist()
 
 # creating list of team names
 teamNameList <- allWeeks %>%
@@ -175,6 +178,7 @@ statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SV+H')
 # adding functions for server!
 
 # shiny Application ----
+# ui section ----
 ui <- fluidPage(
   
   # Application title
@@ -237,7 +241,7 @@ ui <- fluidPage(
   ),
   fluidRow(
     plotOutput('vizB2'),
-    style = "padding-bottom:40px"
+    style = "padding-bottom:240px"
   ),
   
   # pitching categories
@@ -267,15 +271,47 @@ ui <- fluidPage(
     column(width = 3,
            selectInput('teamList', 'Which team do you want to see info for?',
                 choices = teamNameList)
-           ),
-    
+           )
+    ),
+  
+  fluidRow(
     plotOutput('vizTSp1'),
     style = "padding-bottom:40px"
+   ),
+  
+  
+  # hitting team specific categories
+  fluidRow(
+    selectInput('hittingCatTeamSp', 'What Hitting Category do you want to see?',
+                choices = statsListHitting,
+                multiple = TRUE,
+                selected = statsListHitting),
+    plotOutput('vizTSpB1'),
+    style = "padding-top:20px;padding-bottom:20px"
+  ),
+  fluidRow(
+    plotOutput('vizTSpB2'),
+    style = "padding-bottom:20px"
   ),
   
+  # pitching team specific categories
+  fluidRow(
+    #style = "padding-top:20px",
+    selectInput('pitchingCatTeamSp', 'What Pitching Category do you want to see?',
+                choices = statsListPitching,
+                multiple = TRUE,
+                selected = statsListPitching),
+    plotOutput('vizTSpP1'),
+    style = "padding-top:20px;padding-bottom:20px"
+  ),
+  fluidRow(
+    plotOutput('vizTSpP2'),
+    style = "padding-bottom:40px"
+  ),
+ 
 )
 
-# add sessions
+# server function ----
 server <- function(input, output, session) {
   
  
@@ -386,8 +422,6 @@ server <- function(input, output, session) {
         colScaleFill,
     res = 96)
   
-  
-  
   # pitching visuals
   output$vizP1 <- renderPlot(
     allWeekStats3 %>%
@@ -432,6 +466,66 @@ server <- function(input, output, session) {
         geom_hline(yintercept = 0, color = 'dark gray'),
     res = 96)
   
+  # team specific - hitting
+  output$vizTSpB1 <- renderPlot(
+    allWeekStats3 %>%
+      filter(display_name %in% c(input$hittingCatTeamSp),
+             team_name == input$teamList,
+             team_stats_week %in% c(min(input$weekRangeToAnalyzeTeamSp):max(input$weekRangeToAnalyzeTeamSp))) %>%
+    ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
+      geom_line() +
+      geom_point() +
+      labs(title = paste('Z-Score for Selected Week Range and Team for Hitting Categories', sep = ' ')) +
+      xlab(label = 'Week Number') +
+      scale_color_discrete(name = "Category") +
+      ylim(-zScoreRange, zScoreRange) +
+      geom_hline(yintercept = 0, color = 'dark gray'),
+    res = 96)
+  
+  output$vizTSpB2 <- renderPlot(
+    allWeekStats3 %>%
+      filter(display_name %in% c(input$hittingCatTeamSp),
+             team_name == input$teamList,
+             team_stats_week  %in% c(min(input$weekRangeToAnalyzeTeamSp):max(input$weekRangeToAnalyzeTeamSp)))  %>%
+    group_by(display_name) %>%
+    summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+    ggplot(aes(x = display_name, y = zScore)) +
+      geom_col() +
+      labs(title = paste('Mean Z-Score for Selected Week Range and Team for Hitting Categories', sep = ' ')) +
+      ylim(-zScoreRange, zScoreRange) +
+      geom_hline(yintercept = 0, color = 'dark gray'),
+    res = 96)
+  
+  
+  # team specific - pitching
+  output$vizTSpP1 <- renderPlot(
+    allWeekStats3 %>%
+      filter(display_name %in% c(input$pitchingCatTeamSp),
+             team_name == input$teamList,
+             team_stats_week %in% c(min(input$weekRangeToAnalyzeTeamSp):max(input$weekRangeToAnalyzeTeamSp))) %>%
+      ggplot(aes(x = as.numeric(team_stats_week), y = zScore, color = display_name)) +
+      geom_line() +
+      geom_point() +
+      labs(title = paste('Z-Score for Selected Week Range and Team for Pitching Categories', sep = ' ')) +
+      xlab(label = 'Week Number') +
+      scale_color_discrete(name = "Category") +
+      ylim(-zScoreRange, zScoreRange) +
+      geom_hline(yintercept = 0, color = 'dark gray'),
+    res = 96)
+  
+  output$vizTSpP2 <- renderPlot(
+    allWeekStats3 %>%
+      filter(display_name %in% c(input$pitchingCatTeamSp),
+             team_name == input$teamList,
+             team_stats_week  %in% c(min(input$weekRangeToAnalyzeTeamSp):max(input$weekRangeToAnalyzeTeamSp)))  %>%
+      group_by(display_name) %>%
+      summarise(zScore = mean(zScore, na.rm = TRUE)) %>%
+      ggplot(aes(x = display_name, y = zScore)) +
+      geom_col() +
+      labs(title = paste('Mean Z-Score for Selected Week Range and Team for Pitching Categories', sep = ' ')) +
+      ylim(-zScoreRange, zScoreRange) +
+      geom_hline(yintercept = 0, color = 'dark gray'),
+    res = 96)
 }
 
 
