@@ -89,7 +89,7 @@ zScoreWeek <- function(weekNum){
     mutate(Week = paste('Week', weekNum), .before = team_name) %>%
     relocate(R, HR, RBI, SB, OPS,
              IP,
-             W, K, ERA, WHIP, `SV+H`,, .after= team_name) %>%
+             W, K, ERA, WHIP, `SV+H`, .after= team_name) %>%
     rename(SVH = `SV+H`)
   
   zScore
@@ -158,59 +158,65 @@ completedWeeks <- allWeeks %>%
   unlist()
 
 
+table4Length <- length(zScoreSumsWeek(min(completedWeeks)))
 
 actualValuesWeek(2)
 
 # adding functions for server!
 
-# new ui and server using DT package ----
-
+# shiny Application ----
 ui <- fluidPage(
   
   # Application title
-  titlePanel("Fantasy Baseball Analyzer"),
+  fluidRow(
+    titlePanel("Fantasy Baseball Analyzer")
+    ),
   
-  
+  fluidRow(
   selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks),
-              selected = 8),
+              selected = 8)
+  ),
   
-  textOutput('table1title'),
+  fluidRow(
+  h3('Results for Selected Week'),
   DTOutput("actualValuesTable"),
+  style = "padding-bottom:20px"
+  ),
   
-  textOutput('table2title'),
-  DTOutput("rankingsTable")
+  fluidRow(
+  h3('Rankings for Selected Week'),
+  DTOutput("rankingsTable"),
+  style = "padding-bottom:20px"
+  ),
   
+  fluidRow(
+    h3('Z-Scores for Selected Week'),
+    DTOutput("zScoreTable"),
+    style = "padding-bottom:20px"
+  ),
+  
+  fluidRow(
+    h3('Sum of Z-Scores by Stat Category Type for Selected Week'),
+    DTOutput("zScoreSumTable"),
+    style = "padding-bottom:20px"
+  )
+  
+  # in next row, add an extra button to get a range of weeks for z score sums
 )
 
 
 server <- function(input, output) {
+  
+  
+  createTable <- function(fAndValue){
+    
+  }
+  
+  
  
-  rValues <- reactiveValues()
-  
-  observe(
-    rValues$week <-  paste('Actual Results for Week', input$weeksToAnalyze)
-  )
-  
-  
-  output$table1title <- renderText({
-    rValues$week
-  }
-  )
-  
-  
-  title2Paste <- reactive({
-    paste('Rankings for Week', input$weeksToAnalyze, '[1 High]')
-  })
-  
-  
-  output$table2title <- renderText({
-    title2Paste()
-  }
-  )
-   
   output$actualValuesTable <- renderDT(
     datatable(
-      actualValuesWeek(input$weeksToAnalyze),
+      actualValuesWeek(input$weeksToAnalyze), # function used to create the table
       options = list(
         paging = FALSE,
         dom = 't'
@@ -221,13 +227,37 @@ server <- function(input, output) {
   
   output$rankingsTable <- renderDT(
     datatable(
-      rankingsWeek(input$weeksToAnalyze),
+      rankingsWeek(input$weeksToAnalyze), # function used to create the table
       options = list(
         paging = FALSE,
         dom = 't'
       ),
       rownames = FALSE #only including the table, not the info summary, or the pagination control!
     )
+  )
+  
+  output$zScoreTable <- renderDT(
+    datatable(
+      zScoreWeek(input$weeksToAnalyze), # function used to create the table
+      options = list(
+        paging = FALSE,
+        dom = 't'
+      ),
+      rownames = FALSE #only including the table, not the info summary, or the pagination control!
+    ) %>%
+      formatRound(columns = 4:14 , digits = 3)
+  )
+  
+  output$zScoreSumTable <- renderDT(
+    datatable(
+      zScoreSumsWeek(input$weeksToAnalyze), # function used to create the table
+      options = list(
+        paging = FALSE,
+        dom = 't'
+      ),
+      rownames = FALSE #only including the table, not the info summary, or the pagination control!
+    ) %>%
+      formatRound(columns = 4:table4Length , digits = 3) #using length of the table
   )
   
   
@@ -239,15 +269,15 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 
-
-title1Paste <- reactive({
-  paste('Actual Results for Week', input$weeksToAnalyze)
-})
-
-
-output$table1title <- renderText({
-  title1Paste()
-}
+# title stuff!!!
+# title1Paste <- reactive({
+#   paste('Actual Results for Week', input$weeksToAnalyze)
+# })
+# 
+# 
+# output$table1title <- renderText({
+#   title1Paste()
+# }
 
 
 
