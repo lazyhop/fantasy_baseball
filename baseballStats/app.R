@@ -124,16 +124,16 @@ zScoreSumsWeek <- function(weekNum){
 
 
 # creating function for a results table by week for total z scores by hitting/pitching! ----
-# zScoreSums <- tibble()
-# 
-# for (c in weekRangeAnalyze ){
-#   zScoreSumsadd <- zScoreSumsWeek(c)
-#   
-#   zScoreSums <- rbind(zScoreSums, zScoreSumsadd)
-# }
-# 
-# zScoreSums2 <- zScoreSums %>%
-#   gather(key = 'team_name', value = 'zScoreSum', 4:15)
+zScoreSums <- tibble()
+
+for (c in completedWeeks ){
+  zScoreSumsadd <- zScoreSumsWeek(c)
+
+  zScoreSums <- rbind(zScoreSums, zScoreSumsadd)
+}
+
+zScoreSums2 <- zScoreSums %>%
+  gather(key = 'team_name', value = 'zScoreSum', 4:15)
 
 
 
@@ -199,19 +199,28 @@ ui <- fluidPage(
     h3('Sum of Z-Scores by Stat Category Type for Selected Week'),
     DTOutput("zScoreSumTable"),
     style = "padding-bottom:20px"
+  ),
+  
+  fluidRow(
+    # sliderInput('weekRangeToAnalyze', 'Choose  Multiple Weeks of Data to View',
+    #             choices =  as.vector(completedWeeks),
+    #             multiple = TRUE,
+    #             selected = max(as.vector(completedWeeks))),
+    style = "padding-top:20px",
+    h2('Data Visuals'),
+    sliderInput('weekRangeToAnalyze', 'Choose  Multiple Weeks of Data to View',
+                value = c(min(as.numeric(completedWeeks)), max(as.numeric(completedWeeks))),
+                min = min(as.numeric(completedWeeks)),
+                max = max(as.numeric(completedWeeks))),
+    plotOutput('viz1'),
+    style = "padding-bottom:20px"
   )
   
   # in next row, add an extra button to get a range of weeks for z score sums
 )
 
-
-server <- function(input, output) {
-  
-  
-  createTable <- function(fAndValue){
-    
-  }
-  
+# add sessions
+server <- function(input, output, session) {
   
  
   output$actualValuesTable <- renderDT(
@@ -224,7 +233,7 @@ server <- function(input, output) {
       rownames = FALSE #only including the table, not the info summary, or the pagination control!
       )
     )
-  
+
   output$rankingsTable <- renderDT(
     datatable(
       rankingsWeek(input$weeksToAnalyze), # function used to create the table
@@ -260,7 +269,19 @@ server <- function(input, output) {
       formatRound(columns = 4:table4Length , digits = 3) #using length of the table
   )
   
-  
+  output$viz1 <- renderPlot(
+    zScoreSums2 %>%
+      filter(position_type == 'Total',
+             weekNumber %in% c(min(input$weekRangeToAnalyze):max(input$weekRangeToAnalyze))) %>% # add the variable here!
+      group_by(team_name) %>%
+      summarise(zScoreSum = sum(zScoreSum)) %>%
+      ggplot(aes(x = team_name, y = zScoreSum, fill = team_name)) +
+        geom_col() +
+        scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+        labs(title = 'Total Z-Score for Selected Week Range') +
+        geom_hline(yintercept = 0, color = 'dark gray') +
+        colScaleFill,
+    res = 96)
   
 }
 
@@ -278,6 +299,9 @@ shinyApp(ui = ui, server = server)
 # output$table1title <- renderText({
 #   title1Paste()
 # }
+
+
+# at some point, try functions!!!!
 
 
 
