@@ -216,13 +216,14 @@ ui <- fluidPage(
   ),
   
   fluidRow(
+    style = "padding-top:20px",
     h2('Data Visuals'),
     sliderInput('weekRangeToAnalyze', 'Choose Week(s) of Data to View',
                 value = c(min(as.numeric(completedWeeks)), max(as.numeric(completedWeeks))),
                 min = min(as.numeric(completedWeeks)),
                 max = max(as.numeric(completedWeeks))),
     plotOutput('viz1'),
-    style = "padding-top:20px"
+    style = "padding-bottom:40px"
   ),
   
   fluidRow(
@@ -240,7 +241,7 @@ ui <- fluidPage(
   ),
   fluidRow(
     plotOutput('vizB2'),
-    style = "padding-bottom:20px"
+    style = "padding-bottom:240px"
   ),
   
   # pitching categories
@@ -253,7 +254,7 @@ ui <- fluidPage(
   ),
   fluidRow(
     plotOutput('vizP2'),
-    style = "padding-bottom:20px"
+    style = "padding-bottom:40px"
   ),
   
   # team specific visuals
