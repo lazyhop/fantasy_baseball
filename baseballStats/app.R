@@ -1,7 +1,7 @@
 
 # Loading Libraries ----
 library(tidyverse)
-library(knitr)
+#library(knitr)
 #library(kableExtra)
 library(RColorBrewer)
 
@@ -188,7 +188,7 @@ ui <- fluidPage(
   
   fluidRow(
   selectInput('weeksToAnalyze', 'What week do you want to see?', choices =  as.vector(completedWeeks),
-              selected = 8)
+              selected = max(as.vector(completedWeeks)))
   ),
   
   fluidRow(
@@ -476,6 +476,8 @@ server <- function(input, output, session) {
       geom_point() +
       labs(title = paste('Z-Score for Selected Week Range and Team for Hitting Categories', sep = ' ')) +
       xlab(label = 'Week Number') +
+      scale_x_continuous(breaks=seq(min(input$weekRangeToAnalyzeTeamSp), max(input$weekRangeToAnalyzeTeamSp), 1),
+                         limits=c(min(input$weekRangeToAnalyzeTeamSp), max(input$weekRangeToAnalyzeTeamSp))) +
       scale_color_discrete(name = "Category") +
       ylim(-zScoreRange, zScoreRange) +
       geom_hline(yintercept = 0, color = 'dark gray'),
@@ -507,6 +509,8 @@ server <- function(input, output, session) {
       geom_point() +
       labs(title = paste('Z-Score for Selected Week Range and Team for Pitching Categories', sep = ' ')) +
       xlab(label = 'Week Number') +
+      scale_x_continuous(breaks=seq(min(input$weekRangeToAnalyzeTeamSp), max(input$weekRangeToAnalyzeTeamSp), 1),
+                         limits=c(min(input$weekRangeToAnalyzeTeamSp), max(input$weekRangeToAnalyzeTeamSp))) +
       scale_color_discrete(name = "Category") +
       ylim(-zScoreRange, zScoreRange) +
       geom_hline(yintercept = 0, color = 'dark gray'),
