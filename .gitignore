@@ -5,6 +5,7 @@
 .httr-oauth
 baseballMarkdown.html
 creatingAPIStaticFiles.log
+creatingAPIStaticFiles.R
 kellzAPI.R
 kellzV2.R
 scriptAutomator.R
