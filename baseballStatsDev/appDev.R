@@ -585,4 +585,11 @@ shinyApp(ui = ui, server = server)
 #     })
 #   )
 #   
+<<<<<<< HEAD
 # }
+=======
+# }
+
+
+
+>>>>>>> 2a51ab035c0aac4810af3baa1ea300363af81c04

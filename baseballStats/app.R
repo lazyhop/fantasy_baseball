@@ -1,4 +1,5 @@
 
+
 # done ----
 # add select all team filter for the Full League Data Visuals PAge and for Full Leage Tables page
 # make the backgrounds transparent, put words on tbale. remove the values
@@ -24,14 +25,11 @@
 # add a max z score on charts to help with comparison?
 # add a table to team specific vid?
 
-
-
 # Loading Libraries ----
 library(tidyverse)
 #library(knitr)
 #library(kableExtra)
 library(RColorBrewer)
-
 library(shiny)
 library(shinyWidgets)
 library(plotly)
@@ -42,6 +40,7 @@ library(DT)
  # load("Output Data/teams.RDS") # for debugging
  # load("Output Data/allWeeks.RDS") # for debugging
  # load("Output Data/stat_cats.RDS") # for debugging
+
 load("teams.RDS")
 load("allWeeks.RDS")
 load("stat_cats.RDS")
@@ -80,6 +79,7 @@ zScoreRange <- allWeekStats3 %>%
   arrange(desc(zScore)) %>%
   distinct(zScore) %>%
   as.numeric()
+
 
 
 # finding the highest mean zscore range by team. 
@@ -123,6 +123,7 @@ actualValuesWeek <- function(weekNum, teamsIncluded){
 }
 
 # creating function for a results table by week for rankings! ----
+
 rankingsWeek <- function(weekNum, teamsIncluded){
   
   rankings <- allWeekStats3 %>%
@@ -174,8 +175,6 @@ zScoreSumsWeek <- function(weekNum, teamsIncluded){
   
   zScoreSumsCat2 <- allWeekStats3 %>%
     ungroup() %>%
-    filter(team_stats_week == weekNum,
-           team_name %in% c(teamsIncluded)) %>%
     mutate(Week = paste('Week', weekNum),
            weekNumber = weekNum) %>%
     group_by(Week, weekNumber, team_name) %>%
@@ -195,6 +194,7 @@ completedWeeks <- allWeeks %>%
   distinct(team_stats_week) %>%
   unlist()
 
+
 # creating list of team names
 teamNameList <- allWeeks %>%
   distinct(team_name) %>%
@@ -209,13 +209,11 @@ zScoreSums <- tibble()
 
 for (c in completedWeeks){
   zScoreSumsadd <- zScoreSumsWeek(c, teamNameList)
-  
   zScoreSums <- rbind(zScoreSums, zScoreSumsadd)
 }
 
 zScoreSums2 <- zScoreSums %>%
   gather(key = 'team_name', value = 'zScoreSum', 4:15)
-
 
 # creating colors for the data viz ----
 myColors <- brewer.pal(12, "Paired")
@@ -235,7 +233,6 @@ table4Length <- length(zScoreSumsWeek(min(completedWeeks), teamNameList))
 # Categories for Hitting & Pitching
 statsListHitting <- c('R', 'HR', 'RBI', 'SB', 'OPS')
 statsListPitching <- c('W', 'K', 'ERA', 'WHIP', 'SV+H')
-
 
 # re-used cosmetics for ggplot
 # Saving individual components then combining later
@@ -287,7 +284,6 @@ visualMotifs <- list(hline_motif, above_avg_text, below_avg_text, theme_motif)
 #         axis.text.y = element_blank(),  # Remove y-axis tick labels
 #         axis.ticks.y = element_blank()  # Remove y-axis ticks (optional)
 #   )
-
 
 # shiny Application ----
 # ui section ----
@@ -721,12 +717,6 @@ server <- function(input, output, session) {
 
 # Run the application ----
 shinyApp(ui = ui, server = server)
-
-
-
-
-
-
 
 
 # ui <- fluidPage(

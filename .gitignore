@@ -3,7 +3,6 @@
 .RData
 .Ruserdata
 .httr-oauth
-baseballMarkdown.html
 creatingAPIStaticFiles.log
 creatingAPIStaticFiles.R
 kellzAPI.R
@@ -19,3 +18,4 @@ potentialFixTOInteractiveIssue
 creatingToken.R
 tokenValue.rds
 deploymentAutomator.R
+creatingAPIStaticFiles.R
