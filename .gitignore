@@ -4,4 +4,17 @@
 .Ruserdata
 .httr-oauth
 baseballMarkdown.html
-creatingAPIStaticFiles.R
+creatingAPIStaticFiles.log
+kellzAPI.R
+kellzV2.R
+scriptAutomator.R
+creatingToken.R
+Source Files
+archive
+notes
+howAutomationWorks
+howToDeleteAutomation
+potentialFixTOInteractiveIssue
+creatingToken.R
+tokenValue.rds
+deploymentAutomator.R

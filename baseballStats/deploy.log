@@ -1,0 +1,571 @@
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 85,449b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10112279
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1532080871
+  building: Building image: 12476267
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12476267
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 86,333b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10151574
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1534680708
+  building: Parsing manifest
+  building: Building image: 12526599
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12526599
+  deploying: Starting instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 87,068b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10192854
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1537422280
+  building: Building image: 12577601
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12577601
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 87,958b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10269742
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1542849211
+  building: Building image: 12669494
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12669494
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 88,889b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10344250
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1548602796
+  building: Building image: 12756379
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12756379
+  deploying: Starting instances
+  rollforward: Activating new instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 89,812b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10423415
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1554133754
+  building: Building image: 12842769
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12842769
+  deploying: Starting instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 90,390b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10465616
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1556854615
+  building: Building image: 12888162
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12888162
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 91,358b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10542194
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1562473441
+  building: Building image: 12970732
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 12970732
+  deploying: Starting instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 91,743b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10577218
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1565177099
+  building: Building image: 13009021
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13009021
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 92,231b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10613395
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1568106372
+  building: Parsing manifest
+  building: Building image: 13049287
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13049287
+  deploying: Starting instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 93,215b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10724203
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1576125551
+  building: Building image: 13169845
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13169845
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 94,125b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10786226
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1581300851
+  building: Building image: 13241094
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13241094
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 94,694b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10816346
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1584000423
+  building: Building image: 13279771
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13279771
+  deploying: Starting instances
+  rollforward: Activating new instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 95,963b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10907451
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1592398665
+  building: Parsing manifest
+  building: Building image: 13417518
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13417518
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,351b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 10937375
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1595201756
+  building: Parsing manifest
+  building: Building image: 13466374
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13466374
+  deploying: Starting instances
+  rollforward: Activating new instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,400b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11028157
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1603482868
+  building: Building image: 13608368
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13608368
+  deploying: Starting instances
+  rollforward: Activating new instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,460b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11090882
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1609084027
+  building: Parsing manifest
+  building: Building image: 13701697
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13701697
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,512b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11124054
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1611863469
+  building: Building image: 13749685
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13749685
+  deploying: Starting instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,568b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11292224
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1626145731
+  building: Parsing manifest
+  building: Building image: 13988051
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 13988051
+  deploying: Starting instances
+  rollforward: Activating new instances
+  unstaging: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,631b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11526610
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1646705590
+  building: Building image: 14280055
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 14280055
+  deploying: Starting instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,705b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11650405
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1658333380
+  building: Building image: 14464942
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 14464942
+  deploying: Starting instances
+  terminating: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE
+Loading required package: rsconnect
+── Preparing for deployment ────────────────────────────────────────────────────
+✔ Re-deploying "baseballStats" using "server: shinyapps.io / username: lazyhop"
+ℹ Looking up application with id "12113859"...
+✔ Found application <https://lazyhop.shinyapps.io/baseballStats/>
+ℹ Bundling 6 files: 'allWeeks.RDS', 'app.R', 'deploy.log', 'deploy.R', 'stat_cats.RDS', and 'teams.RDS'
+ℹ Capturing R dependencies with renv
+✔ Found 124 dependencies
+✔ Created 96,756b bundle
+ℹ Uploading bundle...
+✔ Uploaded bundle with id 11683517
+── Deploying to server ─────────────────────────────────────────────────────────
+Waiting for task: 1661306526
+  building: Building image: 14509758
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 14509758
+  deploying: Starting instances
+  rollforward: Activating new instances
+  success: Stopping old instances
+── Deployment complete ─────────────────────────────────────────────────────────
+✔ Successfully deployed to <https://lazyhop.shinyapps.io/baseballStats/>
+Successfully published to shinyapps.io
+[1] TRUE

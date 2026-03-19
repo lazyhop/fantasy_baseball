@@ -1,0 +1,15 @@
+========================================
+Deployment Process Started
+Timestamp: 2025-03-28 08:32:31 
+Script: D:\hopki\Documents\R_Projects\fantasy_baseball\baseballStats\deploy.R 
+========================================
+
+Script verification passed
+
+--- Scheduling Task ---
+
+Task successfully scheduled to run weekly on Mondays
+Next run expected: 2025-03-28 08:33 
+
+========================================
+Process completed at: 2025-03-28 08:32:31 
